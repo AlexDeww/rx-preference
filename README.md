@@ -1,5 +1,7 @@
 # rx-preference
 
+It's a fork https://github.com/f2prateek/rx-preferences
+
 The Status of the lib: 
 [![Release](https://jitpack.io/v/alexdeww/rx-preference.svg)](https://jitpack.io/#AlexDeww/rx-preference/1.0)
 
