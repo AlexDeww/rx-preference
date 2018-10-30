@@ -8,6 +8,7 @@ class LambdaPreferenceAdapter<T>(
 ) : PreferenceAdapter<T> {
     override fun getValue(sharedPreferences: SharedPreferences, key: String, defValue: T): T =
             reader(sharedPreferences, key, defValue)
+
     override fun setValue(sharedPreferencesEditor: SharedPreferences.Editor, key: String, newValue: T) {
         writer(sharedPreferencesEditor, key, newValue)
     }
