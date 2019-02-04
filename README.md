@@ -3,7 +3,7 @@
 It's a fork https://github.com/f2prateek/rx-preferences
 
 The Status of the lib: 
-[![Release](https://jitpack.io/v/alexdeww/rx-preference.svg)](https://jitpack.io/#AlexDeww/rx-preference/1.0)
+[![](https://jitpack.io/v/AlexDeww/rx-preference.svg)](https://jitpack.io/#AlexDeww/rx-preference)
 
 How to use this lib in your project:
 ```gradle
@@ -18,6 +18,6 @@ allprojects {
 Add to your app module build.gradle
 ```gradle
 dependencies {
-        compile 'com.github.alexdeww:rx-preference:1.0'
+        implementation "com.github.alexdeww:rx-preference:$last_version"
 }
 ```
