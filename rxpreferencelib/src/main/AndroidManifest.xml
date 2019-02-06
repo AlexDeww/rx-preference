@@ -1,8 +1,2 @@
-<manifest
-
-    package="com.alexdeww.rxpreferencelib">
-
-    <application>
-    </application>
-
+<manifest package="com.alexdeww.rxpreferencelib">
 </manifest>
