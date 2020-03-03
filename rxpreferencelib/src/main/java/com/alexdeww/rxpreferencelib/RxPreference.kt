@@ -1,6 +1,6 @@
 package com.alexdeww.rxpreferencelib
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 //no framework dependencies
 interface RxPreference<T> {
