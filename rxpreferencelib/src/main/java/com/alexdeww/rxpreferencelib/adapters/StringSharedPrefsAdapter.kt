@@ -1,45 +1,77 @@
 package com.alexdeww.rxpreferencelib.adapters
 
 import android.content.SharedPreferences
-import com.alexdeww.rxpreferencelib.rxsharedprefs.RxSharedPreferencesAdapter
+import com.alexdeww.rxpreferencelib.common.SharedPreferenceValueAdapter
 
-class StringSharedPrefsAdapter(
-    sharedPreferences: SharedPreferences
-) : RxSharedPreferencesAdapter<String>(sharedPreferences) {
-    override fun getValue(key: String, defValue: String): String =
-        sharedPreferences.getString(key, defValue) ?: defValue
+object StringSharedPrefsValueAdapter : SharedPreferenceValueAdapter<String> {
 
-    override fun setValue(key: String, newValue: String) =
+    override fun getValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        defValue: String
+    ): String = sharedPreferences.getString(key, defValue) ?: defValue
+
+    override fun setValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        newValue: String
+    ) {
         sharedPreferences.edit().apply { putString(key, newValue) }.apply()
+    }
+
 }
 
 
-class StringToIntSharedPrefsAdapter(
-    sharedPreferences: SharedPreferences
-) : RxSharedPreferencesAdapter<Int>(sharedPreferences) {
-    override fun getValue(key: String, defValue: Int): Int =
-        sharedPreferences.getString(key, null)?.toIntOrNull() ?: defValue
+object StringAsIntSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Int> {
 
-    override fun setValue(key: String, newValue: Int) =
+    override fun getValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        defValue: Int
+    ): Int = sharedPreferences.getString(key, null)?.toIntOrNull() ?: defValue
+
+    override fun setValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        newValue: Int
+    ) {
         sharedPreferences.edit().apply { putString(key, newValue.toString()) }.apply()
+    }
+
 }
 
-class StringToLongSharedPrefsAdapter(
-    sharedPreferences: SharedPreferences
-) : RxSharedPreferencesAdapter<Long>(sharedPreferences) {
-    override fun getValue(key: String, defValue: Long): Long =
-        sharedPreferences.getString(key, null)?.toLongOrNull() ?: defValue
+class StringAsLongSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Long> {
 
-    override fun setValue(key: String, newValue: Long) =
+    override fun getValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        defValue: Long
+    ): Long = sharedPreferences.getString(key, null)?.toLongOrNull() ?: defValue
+
+    override fun setValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        newValue: Long
+    ) {
         sharedPreferences.edit().apply { putString(key, newValue.toString()) }.apply()
+    }
+
 }
 
-class StringToFloatSharedPrefsAdapter(
-    sharedPreferences: SharedPreferences
-) : RxSharedPreferencesAdapter<Float>(sharedPreferences) {
-    override fun getValue(key: String, defValue: Float): Float =
-        sharedPreferences.getString(key, null)?.toFloatOrNull() ?: defValue
+class StringAsFloatSharedPrefsAdapter : SharedPreferenceValueAdapter<Float> {
 
-    override fun setValue(key: String, newValue: Float) =
+    override fun getValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        defValue: Float
+    ): Float = sharedPreferences.getString(key, null)?.toFloatOrNull() ?: defValue
+
+    override fun setValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        newValue: Float
+    ) {
         sharedPreferences.edit().apply { putString(key, newValue.toString()) }.apply()
+    }
+
 }

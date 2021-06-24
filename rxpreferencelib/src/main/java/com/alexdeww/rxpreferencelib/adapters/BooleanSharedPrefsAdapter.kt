@@ -1,14 +1,22 @@
 package com.alexdeww.rxpreferencelib.adapters
 
 import android.content.SharedPreferences
-import com.alexdeww.rxpreferencelib.rxsharedprefs.RxSharedPreferencesAdapter
+import com.alexdeww.rxpreferencelib.common.SharedPreferenceValueAdapter
 
-class BooleanSharedPrefsAdapter(
-    sharedPreferences: SharedPreferences
-) : RxSharedPreferencesAdapter<Boolean>(sharedPreferences) {
-    override fun getValue(key: String, defValue: Boolean): Boolean =
-        sharedPreferences.getBoolean(key, defValue)
+object BooleanSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Boolean> {
 
-    override fun setValue(key: String, newValue: Boolean) =
+    override fun getValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        defValue: Boolean
+    ): Boolean = sharedPreferences.getBoolean(key, defValue)
+
+    override fun setValue(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        newValue: Boolean
+    ) {
         sharedPreferences.edit().apply { putBoolean(key, newValue) }.apply()
+    }
+
 }

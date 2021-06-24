@@ -1,19 +1,23 @@
 package com.alexdeww.rxpreferencelib.rxsharedprefs
 
+import android.content.SharedPreferences
 import android.util.Log
 import com.alexdeww.rxpreferencelib.RxPreference
-import com.alexdeww.rxpreferencelib.common.RxPreferenceAdapter
+import com.alexdeww.rxpreferencelib.common.SharedPreferenceValueAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.BackpressureStrategy
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
-open class RxPreferenceImpl<T>(
+internal class RxPreferenceImpl<T>(
     override val key: String,
-    protected val defValue: T,
-    protected val adapter: RxPreferenceAdapter<T>,
+    private val defValue: T,
+    private val adapter: SharedPreferenceValueAdapter<T>,
+    private val sharedPreferences: SharedPreferences,
     prefKeyChangesObservable: Observable<String>
 ) : RxPreference<T> {
 
-    protected open val _observable: Observable<T> = prefKeyChangesObservable
+    private val _observable: Observable<T> = prefKeyChangesObservable
         .filter { key == it }
         .startWithItem("<init>") // Dummy value to trigger initial load.
         .map { value }
@@ -21,16 +25,18 @@ open class RxPreferenceImpl<T>(
     override var value: T
         get() {
             return try {
-                adapter.getValue(key, defValue)
+                adapter.getValue(sharedPreferences, key, defValue)
             } catch (e: Exception) {
                 Log.e("RxPreferenceImpl", "Can't get preference value($key)", e)
                 defValue
             }
         }
         set(value) {
-            adapter.setValue(key, value)
+            adapter.setValue(sharedPreferences, key, value)
         }
 
-    override val observable: Observable<T> get() = _observable.observeOn(AndroidSchedulers.mainThread())
+    override val valueFlowable: Flowable<T> = _observable
+        .toFlowable(BackpressureStrategy.LATEST)
+        .observeOn(AndroidSchedulers.mainThread())
 
 }

@@ -1,53 +1,90 @@
 package com.alexdeww.rxpreferencelib.rxsharedprefs
 
 import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import com.alexdeww.rxpreferencelib.RxPreference
 import com.alexdeww.rxpreferencelib.adapters.*
-import com.alexdeww.rxpreferencelib.common.RxPreferenceAdapter
+import com.alexdeww.rxpreferencelib.common.SharedPreferenceValueAdapter
 import io.reactivex.rxjava3.core.Observable
 
-abstract class RxSharedPreferences(
-    val sharedPreferences: SharedPreferences
-) {
-    protected val keyChangesObservable: Observable<String> = Observable.create<String> { emitter ->
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            emitter.onNext(key ?: "")
-        }
-        emitter.setCancellable {
-            sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
-        }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-    }.share()
-    private val adapters by lazy { Adapters(sharedPreferences) }
+abstract class RxSharedPreferences(val sharedPreferences: SharedPreferences) {
 
-    open fun <T> getPreference(
+    private val keyChangesObservable: Observable<String> = Observable
+        .create<String> { emitter ->
+            val listener = OnSharedPreferenceChangeListener { _, key ->
+                emitter.onNext(key ?: "")
+            }
+            emitter.setCancellable {
+                sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+            }
+            sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        }
+        .share()
+
+    protected fun <T> customValue(
         key: String,
         defValue: T,
-        adapter: RxPreferenceAdapter<T>
-    ): RxPreference<T> =
-        RxPreferenceImpl(key, defValue, adapter, keyChangesObservable)
+        valueAdapter: SharedPreferenceValueAdapter<T>
+    ): RxPreference<T> = RxPreferenceImpl(
+        key = key,
+        defValue = defValue,
+        adapter = valueAdapter,
+        sharedPreferences = sharedPreferences,
+        prefKeyChangesObservable = keyChangesObservable
+    )
 
-    fun getString(key: String, defValue: String = "") =
-        getPreference(key, defValue, adapters.STRING)
+    protected fun stringValue(
+        key: String,
+        defValue: String = ""
+    ): RxPreference<String> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = StringSharedPrefsValueAdapter
+    )
 
-    fun getInt(key: String, defValue: Int = 0) = getPreference(key, defValue, adapters.INT)
+    protected fun intValue(
+        key: String,
+        defValue: Int = 0
+    ): RxPreference<Int> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = IntSharedPrefsValueAdapter
+    )
 
-    fun getLong(key: String, defValue: Long = 0) = getPreference(key, defValue, adapters.LONG)
+    protected fun longValue(
+        key: String,
+        defValue: Long = 0
+    ): RxPreference<Long> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = LongSharedPrefsValueAdapter
+    )
 
-    fun getFloat(key: String, defValue: Float = 0f) = getPreference(key, defValue, adapters.FLOAT)
+    protected fun floatValue(
+        key: String,
+        defValue: Float = 0f
+    ): RxPreference<Float> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = FloatSharedPrefsValueAdapter
+    )
 
-    fun getBoolean(key: String, defValue: Boolean = false) =
-        getPreference(key, defValue, adapters.BOOLEAN)
+    protected fun doubleValue(
+        key: String,
+        defValue: Double = 0.0
+    ): RxPreference<Double> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = DoubleSharedPrefsValueAdapter
+    )
 
-    fun getDouble(key: String, defValue: Double = 0.0) =
-        getPreference(key, defValue, adapters.DOUBLE)
+    protected fun booleanValue(
+        key: String,
+        defValue: Boolean = false
+    ): RxPreference<Boolean> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = BooleanSharedPrefsValueAdapter
+    )
 
-    protected class Adapters(sharedPreferences: SharedPreferences) {
-        val STRING = StringSharedPrefsAdapter(sharedPreferences)
-        val INT = IntSharedPrefsAdapter(sharedPreferences)
-        val LONG = LongSharedPrefsAdapter(sharedPreferences)
-        val FLOAT = FloatSharedPrefsAdapter(sharedPreferences)
-        val BOOLEAN = BooleanSharedPrefsAdapter(sharedPreferences)
-        val DOUBLE = DoubleSharedPrefsAdapter(sharedPreferences)
-    }
 }

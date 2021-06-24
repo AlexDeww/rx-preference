@@ -1,10 +1,9 @@
 package com.alexdeww.rxpreferencelib
 
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Flowable
 
-//no framework dependencies
 interface RxPreference<T> {
     val key: String
     var value: T
-    val observable: Observable<T>
+    val valueFlowable: Flowable<T>
 }
