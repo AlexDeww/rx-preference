@@ -21,7 +21,6 @@ object StringSharedPrefsValueAdapter : SharedPreferenceValueAdapter<String> {
 
 }
 
-
 object StringAsIntSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Int> {
 
     override fun getValue(
@@ -40,7 +39,7 @@ object StringAsIntSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Int> {
 
 }
 
-class StringAsLongSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Long> {
+object StringAsLongSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Long> {
 
     override fun getValue(
         sharedPreferences: SharedPreferences,
@@ -58,7 +57,7 @@ class StringAsLongSharedPrefsValueAdapter : SharedPreferenceValueAdapter<Long> {
 
 }
 
-class StringAsFloatSharedPrefsAdapter : SharedPreferenceValueAdapter<Float> {
+object StringAsFloatSharedPrefsAdapter : SharedPreferenceValueAdapter<Float> {
 
     override fun getValue(
         sharedPreferences: SharedPreferences,

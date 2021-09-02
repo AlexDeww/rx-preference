@@ -21,7 +21,7 @@ abstract class RxSharedPreferences(val sharedPreferences: SharedPreferences) {
         }
         .share()
 
-    protected fun <T> customValue(
+    protected fun <T : Any> customValue(
         key: String,
         defValue: T,
         valueAdapter: SharedPreferenceValueAdapter<T>
@@ -40,6 +40,33 @@ abstract class RxSharedPreferences(val sharedPreferences: SharedPreferences) {
         key = key,
         defValue = defValue,
         valueAdapter = StringSharedPrefsValueAdapter
+    )
+
+    protected fun stringAsIntValue(
+        key: String,
+        defValue: Int = 0
+    ): RxPreference<Int> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = StringAsIntSharedPrefsValueAdapter
+    )
+
+    protected fun stringAsLongValue(
+        key: String,
+        defValue: Long = 0
+    ): RxPreference<Long> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = StringAsLongSharedPrefsValueAdapter
+    )
+
+    protected fun stringAsFloatValue(
+        key: String,
+        defValue: Float = 0f
+    ): RxPreference<Float> = customValue(
+        key = key,
+        defValue = defValue,
+        valueAdapter = StringAsFloatSharedPrefsAdapter
     )
 
     protected fun intValue(

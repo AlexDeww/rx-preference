@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
-internal class RxPreferenceImpl<T>(
+internal class RxPreferenceImpl<T : Any>(
     override val key: String,
     private val defValue: T,
     private val adapter: SharedPreferenceValueAdapter<T>,
@@ -17,10 +17,12 @@ internal class RxPreferenceImpl<T>(
     prefKeyChangesObservable: Observable<String>
 ) : RxPreference<T> {
 
-    private val _observable: Observable<T> = prefKeyChangesObservable
-        .filter { key == it }
-        .startWithItem("<init>") // Dummy value to trigger initial load.
-        .map { value }
+    private val _observable: Observable<T> by lazy {
+        prefKeyChangesObservable
+            .filter { key == it }
+            .startWithItem("<init>") // Dummy value to trigger initial load.
+            .map { value }
+    }
 
     override var value: T
         get() {
@@ -35,8 +37,10 @@ internal class RxPreferenceImpl<T>(
             adapter.setValue(sharedPreferences, key, value)
         }
 
-    override val valueFlowable: Flowable<T> = _observable
-        .toFlowable(BackpressureStrategy.LATEST)
-        .observeOn(AndroidSchedulers.mainThread())
+    override val valueFlowable: Flowable<T> by lazy {
+        _observable
+            .toFlowable(BackpressureStrategy.LATEST)
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
 }
