@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
 group='com.github.AlexDeww'
 
 android {
@@ -31,6 +32,19 @@ dependencies {
     })
     testImplementation 'junit:junit:4.12'
 }
+
 repositories {
     mavenCentral()
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.alexdeww.rxpreference'
+                version = '3.1'
+            }
+        }
+    }
 }
