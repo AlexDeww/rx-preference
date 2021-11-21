@@ -43,7 +43,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.alexdeww.rxpreference'
-                version = '3.1'
+                version = '3.2'
             }
         }
     }
