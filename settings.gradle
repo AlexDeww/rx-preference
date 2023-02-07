@@ -1,1 +1,1 @@
-include ':app', ':rxpreferencelib'
+include ':rxpreferencelib'

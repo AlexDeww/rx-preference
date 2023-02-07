@@ -24,18 +24,15 @@ internal class RxPreferenceImpl<T : Any>(
             .map { value }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     override var value: T
-        get() {
-            return try {
-                adapter.getValue(sharedPreferences, key, defValue)
-            } catch (e: Exception) {
-                Log.e("RxPreferenceImpl", "Can't get preference value($key)", e)
-                defValue
-            }
+        get() = try {
+            adapter.getValue(sharedPreferences, key, defValue)
+        } catch (e: Throwable) {
+            Log.e("RxPreference", "Can't get preference value($key)", e)
+            defValue
         }
-        set(value) {
-            adapter.setValue(sharedPreferences, key, value)
-        }
+        set(value) = adapter.setValue(sharedPreferences, key, value)
 
     override val valueFlowable: Flowable<T> by lazy {
         _observable

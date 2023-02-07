@@ -3,23 +3,29 @@ package com.alexdeww.rxpreferencelib.rxsharedprefs
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import com.alexdeww.rxpreferencelib.RxPreference
-import com.alexdeww.rxpreferencelib.adapters.*
+import com.alexdeww.rxpreferencelib.adapters.BooleanSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.DoubleSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.FloatSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.IntSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.LongSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.StringAsFloatSharedPrefsAdapter
+import com.alexdeww.rxpreferencelib.adapters.StringAsIntSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.StringAsLongSharedPrefsValueAdapter
+import com.alexdeww.rxpreferencelib.adapters.StringSharedPrefsValueAdapter
 import com.alexdeww.rxpreferencelib.common.SharedPreferenceValueAdapter
 import io.reactivex.rxjava3.core.Observable
 
 abstract class RxSharedPreferences(val sharedPreferences: SharedPreferences) {
 
-    private val keyChangesObservable: Observable<String> = Observable
-        .create<String> { emitter ->
-            val listener = OnSharedPreferenceChangeListener { _, key ->
-                emitter.onNext(key ?: "")
-            }
-            emitter.setCancellable {
-                sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
-            }
-            sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    private val keyChangesObservable: Observable<String> = Observable.create { emitter ->
+        val listener = OnSharedPreferenceChangeListener { _, key ->
+            emitter.onNext(key ?: "")
         }
-        .share()
+        emitter.setCancellable {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    }.share()
 
     protected fun <T : Any> customValue(
         key: String,

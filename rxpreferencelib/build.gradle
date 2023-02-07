@@ -4,11 +4,11 @@ apply plugin: 'maven-publish'
 group='com.github.AlexDeww'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 31
+        minSdkVersion 21
+        targetSdkVersion 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -24,8 +24,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
-    implementation "io.reactivex.rxjava3:rxjava:3.1.2"
+    implementation "io.reactivex.rxjava3:rxandroid:3.0.2"
+    implementation "io.reactivex.rxjava3:rxjava:3.1.5"
 
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -43,7 +43,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.alexdeww.rxpreference'
-                version = '3.2'
+                version = '3.3'
             }
         }
     }
